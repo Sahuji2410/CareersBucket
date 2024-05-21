@@ -36,6 +36,10 @@ OTHER_APPS = [
     'Web.web_app',
     'Apps.apps_models'
 ]
+THIRD_PARTY_APPS = [
+    'drf_yasg',
+    'rest_framework',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]+OTHER_APPS
+]+OTHER_APPS+THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
