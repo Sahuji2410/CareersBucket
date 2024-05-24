@@ -71,6 +71,7 @@ class JobDescription(models.Model):
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='job_postings')
     posted_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    url = models.URLField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.title

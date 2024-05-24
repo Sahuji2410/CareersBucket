@@ -1,3 +1,138 @@
-from django.shortcuts import render
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views import View
+from Apps.apps_models.models import JobType, JobDescription
+from django.conf import settings
 
-# Create your views here.
+
+# JobType Views
+class JobTypeListView(View):
+    def get(self, request):
+        job_types = JobType.objects.all()
+        return render(request, 'jobtype_list.html', {'job_types': job_types})
+
+class JobTypeDetailView(View):
+    def get(self, request, pk):
+        job_type = get_object_or_404(JobType, pk=pk)
+        return render(request, 'jobtype_detail.html', {'job_type': job_type})
+
+class JobTypeCreateView(View):
+    def get(self, request):
+        return render(request, 'jobtype_form.html')
+
+    def post(self, request):
+        name = request.POST.get('name')
+        if name:
+            JobType.objects.create(name=name)
+            return redirect('jobtype_list')
+        return render(request, 'jobtype_form.html', {'error': 'Name is required'})
+
+class JobTypeUpdateView(View):
+    def get(self, request, pk):
+        job_type = get_object_or_404(JobType, pk=pk)
+        return render(request, 'jobtype_form.html', {'job_type': job_type})
+
+    def post(self, request, pk):
+        job_type = get_object_or_404(JobType, pk=pk)
+        name = request.POST.get('name')
+        if name:
+            job_type.name = name
+            job_type.save()
+            return redirect('jobtype_list')
+        return render(request, 'jobtype_form.html', {'job_type': job_type, 'error': 'Name is required'})
+
+class JobTypeDeleteView(View):
+    def get(self, request, pk):
+        job_type = get_object_or_404(JobType, pk=pk)
+        return render(request, 'jobtype_confirm_delete.html', {'job_type': job_type})
+
+    def post(self, request, pk):
+        job_type = get_object_or_404(JobType, pk=pk)
+        job_type.delete()
+        return redirect('jobtype_list')
+
+
+# JobDescription Views
+class JobDescriptionListView(View):
+    def get(self, request):
+        job_descriptions = JobDescription.objects.all()
+        return render(request, 'jobdescription_list.html', {'job_descriptions': job_descriptions})
+
+class JobDescriptionDetailView(View):
+    def get(self, request, pk):
+        job_description = get_object_or_404(JobDescription, pk=pk)
+        return render(request, 'jobdescription_detail.html', {'job_description': job_description})
+
+class JobDescriptionCreateView(View):
+    def get(self, request):
+        return render(request, 'jobdescription_form.html')
+
+    def post(self, request):
+        title = request.POST.get('title')
+        company_name = request.POST.get('company_name')
+        location = request.POST.get('location')
+        job_type_id = request.POST.get('job_type')
+        description = request.POST.get('description')
+        requirements = request.POST.get('requirements')
+        salary = request.POST.get('salary')
+        posted_by_id = request.POST.get('posted_by')
+        url = request.POST.get('url')
+
+        if all([title, company_name, location, job_type_id, description, requirements, posted_by_id]):
+            job_type = get_object_or_404(JobType, pk=job_type_id)
+            posted_by = get_object_or_404(settings.AUTH_USER_MODEL, pk=posted_by_id)
+            JobDescription.objects.create(
+                title=title,
+                company_name=company_name,
+                location=location,
+                job_type=job_type,
+                description=description,
+                requirements=requirements,
+                salary=salary,
+                posted_by=posted_by,
+                url=url
+            )
+            return redirect('jobdescription_list')
+        return render(request, 'jobdescription_form.html', {'error': 'All fields except salary and url are required'})
+
+class JobDescriptionUpdateView(View):
+    def get(self, request, pk):
+        job_description = get_object_or_404(JobDescription, pk=pk)
+        return render(request, 'jobdescription_form.html', {'job_description': job_description})
+
+    def post(self, request, pk):
+        job_description = get_object_or_404(JobDescription, pk=pk)
+        title = request.POST.get('title')
+        company_name = request.POST.get('company_name')
+        location = request.POST.get('location')
+        job_type_id = request.POST.get('job_type')
+        description = request.POST.get('description')
+        requirements = request.POST.get('requirements')
+        salary = request.POST.get('salary')
+        posted_by_id = request.POST.get('posted_by')
+        url = request.POST.get('url')
+
+        if all([title, company_name, location, job_type_id, description, requirements, posted_by_id]):
+            job_description.title = title
+            job_description.company_name = company_name
+            job_description.location = location
+            job_description.job_type = get_object_or_404(JobType, pk=job_type_id)
+            job_description.description = description
+            job_description.requirements = requirements
+            job_description.salary = salary
+            job_description.posted_by = get_object_or_404(settings.AUTH_USER_MODEL, pk=posted_by_id)
+            job_description.url = url
+            job_description.save()
+            return redirect('jobdescription_list')
+        return render(request, 'jobdescription_form.html', {'job_description': job_description, 'error': 'All fields except salary and url are required'})
+
+class JobDescriptionDeleteView(View):
+    def get(self, request, pk):
+        job_description = get_object_or_404(JobDescription, pk=pk)
+        return render(request, 'jobdescription_confirm_delete.html', {'job_description': job_description})
+
+    def post(self, request, pk):
+        job_description = get_object_or_404(JobDescription, pk=pk)
+        job_description.delete()
+        return redirect('jobdescription_list')
