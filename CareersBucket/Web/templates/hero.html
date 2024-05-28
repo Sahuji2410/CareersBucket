@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block JobTypes %}
+  <p>Job Types</p>
+
+  {% for job_type in job_types %}
+    
+    <button class="jobs-button"><a style="text-decoration: none;" href="{% url 'jobtype_detail' job_type.pk %}">{{ job_type.name }}</a></button>
+
+  {% endfor %}
+{% endblock %}
+
+
+
+{% block content %}
+<style>
+
+    .Cards_item {
+        display: flex;
+        justify-content:space-between;
+    }
+
+    .Cards_item button {
+        padding: 10px 20px;
+        background-color: #007bff; /* Adjust color as needed */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .Cards_item button:hover {
+        background-color: #0056b3; /* Adjust hover color as needed */
+    }
+   
+    .searchbar {
+        width: 45%; 
+        margin-left:23px;
+    }
+
+    .searchbar input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    @media only screen and (max-width: 750px) {
+        .searchbar{
+            width:100%;
+            margin:0px;
+            top:0px;
+        }
+    }
+    .announcement-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        background: white;
+        border-radius: 23px;
+        margin: 23px;
+       
+    }
+    .announcement-card{
+        width:60%;
+    }
+    .youtube-video{
+    border-radius: 23px;
+    }
+    .announcement-content  {
+        width:60%;
+    }
+    
+    /* Styles for small screens */
+    @media only screen and (max-width: 900px) {
+        .announcement-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 0px;
+            margin: 5px;
+        }
+    
+        .announcement-content {
+            text-align: center;
+        }
+        .announcement-content h2 {
+            font-size: 0.9rem;
+        }
+    
+        .announcement-content p {
+            font-size: 0.7rem;
+        }
+    }
+    .job-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
+        gap: 20px;
+        margin: 0 3%;
+      }
+      
+      .job-card {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: 228px;
+      }
+      
+      .company-logo-container img {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .company-logo {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      
+      .job-details {
+        padding: 10px;
+      }
+      
+      .job-element {
+        display: flex;
+        margin-bottom: 5px;
+      }
+      
+      .element-label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 3px;
+        font-size: 14px; /* Decreased font size */
+      }
+      
+      .element-value {
+        color: #333;
+        margin-top: 3px;
+        font-size: 12px; /* Decreased font size */
+      }
+      
+      .more-view button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      
+      .more-view button:hover {
+        background-color: #007bff;
+      }
+</style>
+<div class='container'>
+    
+
+    <div class="row">
+        <div class="col">
+            <div class="announcement-container">
+                <div class="announcement-content">
+                    <h2>Your Announcement Title</h2>
+                    <p>This is where you can write your announcement content. You can include text, images, or any other media.</p>
+                </div>
+                <div class="youtube-card">
+                    <div class="youtube-video">
+                        <iframe title="YouTube Video" width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            <!-- Add your three dots button here -->
+            
+        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+          <div class="announcement-container">
+              <div class="announcement-content">
+                  <p style="text-align: center;"> All {{ job_type.name }} Jobs.</p>
+              </div>
+          </div>
+          <!-- Add your three dots button here -->
+          
+      </div>
+  </div>
+    
+
+  <div class="job-container">
+    {% if job_descriptions %}
+        {% for job_description in job_descriptions %}
+        <div class="job-card">
+          <div class="company-logo-container">
+            {% if job_description.image %}
+                <img src="{{ job_description.image.url }}" alt="Company Logo" />
+            {% else %}
+                <img src="{% static 'images/jobImage.png' %}" alt="Default Job Image" />
+            {% endif %}
+          </div>
+        
+            <div class="job-details">
+                <div class="job-element">
+                    <div class="element-label">Company:</div>
+                    <div class="element-value">{{ job_description.company_name }}</div>
+                </div>
+                <div class="job-element">
+                    <div class="element-label">Experience:</div>
+                    <div class="element-value">{{ job_description.experience_leveel }}</div>
+                </div>
+                <div class="job-element">
+                    <div class="element-label">Profile:</div>
+                    <div class="element-value">{{ job_description.title }}</div>
+                </div>
+                <div class="job-element">
+                    <div class="element-label">Salary:</div>
+                    <div class="element-value">{{ job_description.salary }}</div>
+                </div>
+            </div>
+            <div class="more-view">
+                <button>View More</button>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-jobs-available">
+            <p>No jobs available.</p>
+        </div>
+    {% endif %}
+  </div>
+
+</div>
+<!-- Include jQuery and Bootstrap's JavaScript files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

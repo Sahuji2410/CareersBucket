@@ -4,18 +4,36 @@ from django.urls import reverse_lazy
 from django.views import View
 from Apps.apps_models.models import JobType, JobDescription
 from django.conf import settings
+from django.views.generic import DetailView
+
 
 
 # JobType Views
 class JobTypeListView(View):
     def get(self, request):
         job_types = JobType.objects.all()
-        return render(request, 'jobtype_list.html', {'job_types': job_types})
+        job_descriptions = JobDescription.objects.all()
+        return render(request, 'hero.html', {'job_types': job_types, 'job_descriptions': job_descriptions})
 
 class JobTypeDetailView(View):
     def get(self, request, pk):
+        job_types = JobType.objects.all()
         job_type = get_object_or_404(JobType, pk=pk)
-        return render(request, 'jobtype_detail.html', {'job_type': job_type})
+        job_descriptions = JobDescription.objects.filter(job_type=job_type)
+        return render(request, 'hero.html', {'job_types': job_types,'job_type': job_type, 'job_descriptions': job_descriptions})
+    
+class JobDescriptionDetailView(DetailView):
+    model = JobDescription
+    template_name = 'partials/jobdescription_detail_partial.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            return render(self.request, self.template_name, context)
+        return super().render_to_response(context, **response_kwargs)
+    
+
+
+    
 
 class JobTypeCreateView(View):
     def get(self, request):
@@ -59,10 +77,7 @@ class JobDescriptionListView(View):
         job_descriptions = JobDescription.objects.all()
         return render(request, 'jobdescription_list.html', {'job_descriptions': job_descriptions})
 
-class JobDescriptionDetailView(View):
-    def get(self, request, pk):
-        job_description = get_object_or_404(JobDescription, pk=pk)
-        return render(request, 'jobdescription_detail.html', {'job_description': job_description})
+
 
 class JobDescriptionCreateView(View):
     def get(self, request):

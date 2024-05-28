@@ -20,7 +20,7 @@ class CareersBucketBaseUser(AbstractBaseUser,CommonTimePicker,PermissionsMixin):
     user_type = models.CharField("User Type",max_length=10,default="User",choices=USER_TYPE_CHOICES,db_index=True)
     email = models.EmailField(('email address'), unique=True, db_index=True)
     full_name = models.CharField(('full name'), max_length=255, blank=True, null=True, db_index=True)
-    profile_picture = models.ImageField("profile picture",blank=True)
+    profile_picture = models.ImageField("profile picture",upload_to='profile_images/', null=True, blank=True)
 
     phone_number = models.CharField("Phone Number",max_length=20,blank=True,null=True,db_index=True)
 
@@ -61,6 +61,7 @@ class JobType(models.Model):
         return self.name
 
 class JobDescription(models.Model):
+
     title = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
@@ -72,6 +73,8 @@ class JobDescription(models.Model):
     posted_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     url = models.URLField(max_length=200, null=True, blank=True)
+    company_picture = models.ImageField("company picture",upload_to='company_images/', null=True, blank=True)
+
 
     def __str__(self):
         return self.title

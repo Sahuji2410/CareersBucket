@@ -9,6 +9,9 @@ urlpatterns = [
     # JobType URLs
     path('', JobTypeListView.as_view(), name='jobtype_list'),
     path('jobtypes/<int:pk>/', JobTypeDetailView.as_view(), name='jobtype_detail'),
+
+
+    
     path('jobtypes/create/', JobTypeCreateView.as_view(), name='jobtype_create'),
     path('jobtypes/<int:pk>/update/', JobTypeUpdateView.as_view(), name='jobtype_update'),
     path('jobtypes/<int:pk>/delete/', JobTypeDeleteView.as_view(), name='jobtype_delete'),
