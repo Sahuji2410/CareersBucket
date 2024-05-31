@@ -66,6 +66,7 @@ class JobDescription(models.Model):
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
     job_type = models.ForeignKey(JobType, on_delete=models.CASCADE, related_name='job_descriptions')
+    experience_level = models.CharField('Experience required ',max_length=150,default="Entry Lever")
     description = models.TextField()
     requirements = models.TextField()
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
