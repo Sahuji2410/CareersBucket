@@ -3,42 +3,32 @@
 {% block title %}{% endblock %}
 {% block JobTypes %}
   <p>Job Types</p>
-
   {% for job_type in job_types %}
-    
     <button class="jobs-button"><a style="text-decoration: none;" href="{% url 'jobtype_detail' job_type.pk %}">{{ job_type.name }}</a></button>
-
   {% endfor %}
 {% endblock %}
 
-
-
 {% block content %}
 <style>
-
     .Cards_item {
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
     }
-
     .Cards_item button {
         padding: 10px 20px;
-        background-color: #007bff; /* Adjust color as needed */
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
     }
-
     .Cards_item button:hover {
-        background-color: #0056b3; /* Adjust hover color as needed */
+        background-color: #0056b3;
     }
-   
     .searchbar {
-        width: 45%; 
-        margin-left:23px;
+        width: 45%;
+        margin-left: 23px;
     }
-
     .searchbar input {
         padding: 8px;
         border: 1px solid #ccc;
@@ -47,10 +37,10 @@
         width: 100%;
     }
     @media only screen and (max-width: 750px) {
-        .searchbar{
-            width:100%;
-            margin:0px;
-            top:0px;
+        .searchbar {
+            width: 100%;
+            margin: 0px;
+            top: 0px;
         }
     }
     .announcement-container {
@@ -61,19 +51,16 @@
         background: white;
         border-radius: 23px;
         margin: 23px;
-       
     }
-    .announcement-card{
-        width:60%;
+    .announcement-card {
+        width: 60%;
     }
-    .youtube-video{
-    border-radius: 23px;
+    .youtube-video {
+        border-radius: 23px;
     }
-    .announcement-content  {
-        width:60%;
+    .announcement-content {
+        width: 60%;
     }
-    
-    /* Styles for small screens */
     @media only screen and (max-width: 900px) {
         .announcement-container {
             flex-direction: column;
@@ -81,14 +68,12 @@
             gap: 0px;
             margin: 5px;
         }
-    
         .announcement-content {
             text-align: center;
         }
         .announcement-content h2 {
             font-size: 0.9rem;
         }
-    
         .announcement-content p {
             font-size: 0.7rem;
         }
@@ -98,9 +83,8 @@
         grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
         gap: 20px;
         margin: 0 3%;
-      }
-      
-      .job-card {
+    }
+    .job-card {
         background-color: #ffffff;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -110,46 +94,39 @@
         align-items: center;
         text-align: center;
         height: 228px;
-      }
-      
-      .company-logo-container img {
+    }
+    .company-logo-container img {
         width: 80px;
         height: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      
-      .company-logo {
+    }
+    .company-logo {
         width: 100%;
         height: 100%;
         border-radius: 50%;
         object-fit: cover;
-      }
-      
-      .job-details {
+    }
+    .job-details {
         padding: 10px;
-      }
-      
-      .job-element {
+    }
+    .job-element {
         display: flex;
         margin-bottom: 5px;
-      }
-      
-      .element-label {
+    }
+    .element-label {
         font-weight: bold;
         color: #555;
         margin-bottom: 3px;
-        font-size: 14px; /* Decreased font size */
-      }
-      
-      .element-value {
+        font-size: 14px;
+    }
+    .element-value {
         color: #333;
         margin-top: 3px;
-        font-size: 12px; /* Decreased font size */
-      }
-      
-      .more-view button {
+        font-size: 12px;
+    }
+    .more-view button {
         background-color: #007bff;
         color: #fff;
         border: none;
@@ -157,15 +134,46 @@
         padding: 5px 10px;
         font-size: 12px;
         cursor: pointer;
-      }
-      
-      .more-view button:hover {
-        background-color: #007bff;
-      }
+    }
+    .more-view button:hover {
+        background-color: #0056b3;
+    }
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 10px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
-<div class='container'>
-    
 
+<div class="container">
     <div class="row">
         <div class="col">
             <div class="announcement-container">
@@ -179,118 +187,98 @@
                     </div>
                 </div>
             </div>
-            <!-- Add your three dots button here -->
-            
         </div>
     </div>
     <div class="row">
-      <div class="col">
-          <div class="announcement-container">
-              <div class="announcement-content">
-                  <p style="text-align: center;"> All {{ job_type.name }} Jobs.</p>
-              </div>
-          </div>
-          <!-- Add your three dots button here -->
-          
-      </div>
-  </div>
-    
-
-  <div class="job-container">
-    {% if job_descriptions %}
-        {% for job_description in job_descriptions %}
-        <div class="job-card">
-          <div class="company-logo-container">
-            {% if job_description.image %}
-                <img src="{{ job_description.image.url }}" alt="Company Logo" />
-            {% else %}
-                <img src="{% static 'images/jobImage.png' %}" alt="Default Job Image" />
-            {% endif %}
-          </div>
-        
-            <div class="job-details">
-                <div class="job-element">
-                    <div class="element-label">Company:</div>
-                    <div class="element-value">{{ job_description.company_name }}</div>
+        <div class="col">
+            <div class="announcement-container">
+                <div class="announcement-content">
+                    <p style="text-align: center;">All {{ job_type.name }} Jobs.</p>
                 </div>
-                <div class="job-element">
-                    <div class="element-label">Experience:</div>
-                    <div class="element-value">{{ job_description.experience_level }}</div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Profile:</div>
-                    <div class="element-value">{{ job_description.title }}</div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Salary:</div>
-                    <div class="element-value">{{ job_description.salary }}</div>
-                </div>
-            </div>
-            <div class="more-view">
-                <button 
-                    class="view-more-btn" 
-                    data-title="{{ job_description.title }}"
-                    data-company="{{ job_description.company_name }}"
-                    data-experience="{{ job_description.experience_level }}"
-                    data-profile="{{ job_description.title }}"
-                    data-salary="{{ job_description.salary }}"
-                    data-description="{{ job_description.description }}"
-                >View More</button>
-            </div>
-        </div>
-        {% endfor %}
-    {% else %}
-        <div class="no-jobs-available">
-            <p>No jobs available.</p>
-        </div>
-    {% endif %}
-  </div>
-
-</div>
-<!-- Modal Structure -->
-<div id="jobDetailModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="jobTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="job-element">
-                    <div class="element-label">Company:</div>
-                    <div class="element-value" id="jobCompany"></div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Experience:</div>
-                    <div class="element-value" id="jobExperience"></div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Profile:</div>
-                    <div class="element-value" id="jobProfile"></div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Salary:</div>
-                    <div class="element-value" id="jobSalary"></div>
-                </div>
-                <div class="job-element">
-                    <div class="element-label">Description:</div>
-                    <div class="element-value" id="jobDescription"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+    <div class="job-container">
+        {% if job_descriptions %}
+            {% for job_description in job_descriptions %}
+            <div class="job-card">
+                <div class="company-logo-container">
+                    {% if job_description.image %}
+                        <img src="{{ job_description.image.url }}" alt="Company Logo" />
+                    {% else %}
+                        <img src="{% static 'images/jobImage.png' %}" alt="Default Job Image" />
+                    {% endif %}
+                </div>
+                <div class="job-details">
+                    <div class="job-element">
+                        <div class="element-label">Company:</div>
+                        <div class="element-value">{{ job_description.company_name }}</div>
+                    </div>
+                    <div class="job-element">
+                        <div class="element-label">Experience:</div>
+                        <div class="element-value">{{ job_description.experience_level }}</div>
+                    </div>
+                    <div class="job-element">
+                        <div class="element-label">Profile:</div>
+                        <div class="element-value">{{ job_description.title }}</div>
+                    </div>
+                    <div class="job-element">
+                        <div class="element-label">Salary:</div>
+                        <div class="element-value">{{ job_description.salary }}</div>
+                    </div>
+                </div>
+                <div class="more-view">
+                    <button 
+                        class="view-more-btn" 
+                        data-title="{{ job_description.title }}"
+                        data-company="{{ job_description.company_name }}"
+                        data-experience="{{ job_description.experience_level }}"
+                        data-profile="{{ job_description.title }}"
+                        data-salary="{{ job_description.salary }}"
+                        data-description="{{ job_description.description }}"
+                    >View More</button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-jobs-available">
+                <p>No jobs available.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
-<!-- Include jQuery and Bootstrap's JavaScript files -->
+
+<!-- Modal Structure -->
+<div id="jobDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="jobTitle"></h2>
+        <div class="job-element">
+            <div class="element-label">Company:</div>
+            <div class="element-value" id="jobCompany"></div>
+        </div>
+        <div class="job-element">
+            <div class="element-label">Experience:</div>
+            <div class="element-value" id="jobExperience"></div>
+        </div>
+        <div class="job-element">
+            <div class="element-label">Profile:</div>
+            <div class="element-value" id="jobProfile"></div>
+        </div>
+        <div class="job-element">
+            <div class="element-label">Salary:</div>
+            <div class="element-value" id="jobSalary"></div>
+        </div>
+        <div class="job-element">
+            <div class="element-label">Description:</div>
+            <div class="element-value" id="jobDescription"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Include jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<!-- Include jQuery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('.view-more-btn').click(function() {
@@ -308,8 +296,18 @@
             $('#jobSalary').text(salary);
             $('#jobDescription').text(description);
     
-            $('#jobDetailModal').modal('show');
+            $('#jobDetailModal').css('display', 'block');
+        });
+
+        $('.close').click(function() {
+            $('#jobDetailModal').css('display', 'none');
+        });
+
+        $(window).click(function(event) {
+            if (event.target.id === 'jobDetailModal') {
+                $('#jobDetailModal').css('display', 'none');
+            }
         });
     });
-    </script>
+</script>
 {% endblock %}
