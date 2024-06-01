@@ -152,24 +152,47 @@
     }
     .modal-content {
         background-color: #fefefe;
-        margin: 15% auto;
+        margin: 10% auto;
         padding: 20px;
         border: 1px solid #888;
         width: 80%;
         max-width: 600px;
         border-radius: 10px;
+        position: relative;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+    .modal-header h5 {
+        margin: 0;
     }
     .close {
         color: #aaa;
-        float: right;
         font-size: 28px;
         font-weight: bold;
+        cursor: pointer;
     }
     .close:hover,
     .close:focus {
         color: black;
         text-decoration: none;
         cursor: pointer;
+    }
+    .modal-body {
+        padding: 10px 0;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+    }
+    .modal-footer button {
+        margin-left: 10px;
     }
 </style>
 
@@ -236,6 +259,7 @@
                         data-profile="{{ job_description.title }}"
                         data-salary="{{ job_description.salary }}"
                         data-description="{{ job_description.description }}"
+                        data-apply-url="{{ job_description.url }}"
                     >View More</button>
                 </div>
             </div>
@@ -251,27 +275,36 @@
 <!-- Modal Structure -->
 <div id="jobDetailModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="jobTitle"></h2>
-        <div class="job-element">
-            <div class="element-label">Company:</div>
-            <div class="element-value" id="jobCompany"></div>
+        <div class="modal-header">
+            <h5 id="jobTitle"></h5>
+            <span class="close" aria-hidden="true">&times;</span>
         </div>
-        <div class="job-element">
-            <div class="element-label">Experience:</div>
-            <div class="element-value" id="jobExperience"></div>
+        <div class="modal-body">
+            <div class="job-element">
+                <div class="element-label">Company:</div>
+                <div class="element-value" id="jobCompany"></div>
+            </div>
+            <div class="job-element">
+                <div class="element-label">Experience:</div>
+                <div class="element-value" id="jobExperience"></div>
+            </div>
+            <div class="job-element">
+                <div class="element-label">Profile:</div>
+                <div class="element-value" id="jobProfile"></div>
+            </div>
+            <div class="job-element">
+                <div class="element-label">Salary:</div>
+                <div class="element-value" id="jobSalary"></div>
+            </div>
+            <div class="job-element">
+                <div class="element-label">Description:</div>
+                <div class="element-value" id="jobDescription"></div>
+            </div>
         </div>
-        <div class="job-element">
-            <div class="element-label">Profile:</div>
-            <div class="element-value" id="jobProfile"></div>
-        </div>
-        <div class="job-element">
-            <div class="element-label">Salary:</div>
-            <div class="element-value" id="jobSalary"></div>
-        </div>
-        <div class="job-element">
-            <div class="element-label">Description:</div>
-            <div class="element-value" id="jobDescription"></div>
+        <div class="modal-footer">
+            
+            <button type="button" class="btn btn-secondary close"><a style="text-decoration: none;" href="#" id="applyButton" class="btn btn-primary">Apply</a></button>
+            <button type="button" class="btn btn-secondary close">Close</button>
         </div>
     </div>
 </div>
@@ -288,14 +321,16 @@
             var profile = $(this).data('profile');
             var salary = $(this).data('salary');
             var description = $(this).data('description');
-    
+            var applyUrl = $(this).data('apply-url');
+
             $('#jobTitle').text(title);
             $('#jobCompany').text(company);
             $('#jobExperience').text(experience);
             $('#jobProfile').text(profile);
             $('#jobSalary').text(salary);
             $('#jobDescription').text(description);
-    
+            $('#applyButton').attr('href', applyUrl);
+
             $('#jobDetailModal').css('display', 'block');
         });
 
