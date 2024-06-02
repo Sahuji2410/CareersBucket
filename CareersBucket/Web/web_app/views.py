@@ -5,7 +5,7 @@ from django.views import View
 from Apps.apps_models.models import JobType, JobDescription,jobAnnouncments
 from django.conf import settings
 from django.views.generic import DetailView
-
+import re
 
 
 # JobType Views
@@ -14,6 +14,18 @@ class JobTypeListView(View):
         job_types = JobType.objects.all()
         job_descriptions = JobDescription.objects.all()
         other_context = jobAnnouncments.objects.first() # Fetch the single instance
+        # Extract video ID from youtube_link
+        youtube_link = other_context.youtube_link
+        match = re.search(r"\bv=([^&]+)", youtube_link)  # Regular expression to extract video ID
+        if match:
+            video_id = match.group(1)
+            embed_url = f"https://www.youtube.com/embed/{video_id}"  # Construct embed URL
+            print(f"embed url is-------->{embed_url}")
+
+            other_context.youtube_link = embed_url  # Update context with embed URL
+        else:
+            print("Error: Could not extract video ID from YouTube link.")
+
         print("other_context.youtube_link",other_context.youtube_link)
         print("other_context",other_context)
         return render(request, 'hero.html', {'job_types': job_types, 'job_descriptions': job_descriptions , 'other_context':other_context})
@@ -24,6 +36,17 @@ class JobTypeDetailView(View):
         job_type = get_object_or_404(JobType, pk=pk)
         job_descriptions = JobDescription.objects.filter(job_type=job_type)
         other_context = jobAnnouncments.objects.first()  # Fetch the single instance
+        # Extract video ID from youtube_link
+        youtube_link = other_context.youtube_link
+        match = re.search(r"\bv=([^&]+)", youtube_link)  # Regular expression to extract video ID
+        if match:
+            video_id = match.group(1)
+            embed_url = f"https://www.youtube.com/embed/{video_id}"  # Construct embed URL
+            print(f"embed url is-------->{embed_url}")
+            other_context.youtube_link = embed_url  # Update context with embed URL
+        else:
+            print("Error: Could not extract video ID from YouTube link.")
+
         print("other_context.youtube_link",other_context.youtube_link)
 
         print("other_context",other_context)
