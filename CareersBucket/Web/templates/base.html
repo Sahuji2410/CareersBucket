@@ -20,6 +20,7 @@
     }
 
     .SideNavbar {
+      /* position: fixed; */
       width: 200px;
       background: #fff;
       transition: width 0.1s ease, margin-left 0.1s ease;
@@ -27,7 +28,7 @@
       border-top-right-radius: 41px;
       flex-shrink: 0; /* Prevents the sidebar from shrinking */
       height: 100%;
-      overflow: hidden;
+      /* overflow: hidden; */
     }
 
     .Job_type {
@@ -76,6 +77,7 @@
       .SideNavbar.show-sidebar {
         
         margin-left: 0; /* Bring sidebar on-screen */
+        height: 635px;
       }
     
       .toggle-sidebar {
@@ -86,6 +88,28 @@
         z-index: 999; /* Ensure button is above other content */
       }
     }
+
+    .SideNavbar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.SideNavbar_container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.Job_type {
+    flex-grow: 1;
+}
+
+.job-image {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
     
   </style>
 </head>
@@ -96,10 +120,10 @@
         {% block JobTypes %}
         
         {% endblock %}
-        <div class="job-image">
-          <img src="{% static 'images/jobImage.png' %}" alt="Job" />
-        </div>
       </div>
+    </div>
+    <div class="job-image">
+      <img src="{% static 'images/jobImage.png' %}" alt="Job" />
     </div>
   </div>
 

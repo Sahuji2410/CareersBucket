@@ -80,7 +80,7 @@
     }
     .job-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 2fr));
         gap: 20px;
         margin: 0 3%;
     }
@@ -201,13 +201,27 @@
         <div class="col">
             <div class="announcement-container">
                 <div class="announcement-content">
-                    <h2>Your Announcement Title</h2>
-                    <p>This is where you can write your announcement content. You can include text, images, or any other media.</p>
+                    {% if other_context.announment_title %}
+                        <h2>{{ other_context.announment_title }}</h2>
+                    {% else %}
+                        <h2>No announcement</h2>
+                    {% endif %}
+                    <p>{{other_context.description}}</p>
+
                 </div>
                 <div class="youtube-card">
+                    {% if other_context.youtube_link %}
+                    
                     <div class="youtube-video">
-                        <iframe title="YouTube Video" width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="100%" src="{{ other_context.youtube_link }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>                    
+                    {% else %}
+                    <h2>Inside Else</h2>
+
+                    <div class="youtube-video">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/W_r5mpErO7c" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>   
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -226,8 +240,8 @@
             {% for job_description in job_descriptions %}
             <div class="job-card">
                 <div class="company-logo-container">
-                    {% if job_description.image %}
-                        <img src="{{ job_description.image.url }}" alt="Company Logo" />
+                    {% if job_description.company_picture %}
+                        <img src="{{ job_description.company_picture.url }}" alt="Company Logo" />
                     {% else %}
                         <img src="{% static 'images/jobImage.png' %}" alt="Default Job Image" />
                     {% endif %}
@@ -301,7 +315,7 @@
                 <div class="element-value" id="jobDescription"></div>
             </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="align-items: center;">
             
             <button type="button" class="btn btn-secondary close"><a style="text-decoration: none;" href="#" id="applyButton" class="btn btn-primary">Apply</a></button>
             <button type="button" class="btn btn-secondary close">Close</button>

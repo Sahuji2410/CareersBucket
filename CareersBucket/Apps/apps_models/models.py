@@ -79,3 +79,12 @@ class JobDescription(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class jobAnnouncments(models.Model):
+    announment_title = models.CharField(max_length=150,blank=True,null=True,default="No Announcements!")
+    description = models.TextField(max_length=500,blank=True)
+    youtube_link = models.URLField(max_length=250,null=True,blank=True)
+
+    def __str__(self):
+        return self.announment_title

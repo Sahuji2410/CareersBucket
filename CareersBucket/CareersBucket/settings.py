@@ -34,11 +34,13 @@ ALLOWED_HOSTS = []
 OTHER_APPS = [
     'Apps.app',
     'Web.web_app',
-    'Apps.apps_models'
+    'Apps.apps_models',
+    'Web.templatetags'
 ]
 THIRD_PARTY_APPS = [
     'drf_yasg',
     'rest_framework',
+    'embed_video',
 ]
 
 INSTALLED_APPS = [

@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from Apps.apps_models.models import JobType, JobDescription
+from Apps.apps_models.models import JobType, JobDescription,jobAnnouncments
 from django.conf import settings
 from django.views.generic import DetailView
 
@@ -13,14 +13,23 @@ class JobTypeListView(View):
     def get(self, request):
         job_types = JobType.objects.all()
         job_descriptions = JobDescription.objects.all()
-        return render(request, 'hero.html', {'job_types': job_types, 'job_descriptions': job_descriptions})
+        other_context = jobAnnouncments.objects.first() # Fetch the single instance
+        print("other_context.youtube_link",other_context.youtube_link)
+        print("other_context",other_context)
+        return render(request, 'hero.html', {'job_types': job_types, 'job_descriptions': job_descriptions , 'other_context':other_context})
 
 class JobTypeDetailView(View):
     def get(self, request, pk):
         job_types = JobType.objects.all()
         job_type = get_object_or_404(JobType, pk=pk)
         job_descriptions = JobDescription.objects.filter(job_type=job_type)
-        return render(request, 'hero.html', {'job_types': job_types,'job_type': job_type, 'job_descriptions': job_descriptions})
+        other_context = jobAnnouncments.objects.first()  # Fetch the single instance
+        print("other_context.youtube_link",other_context.youtube_link)
+
+        print("other_context",other_context)
+
+
+        return render(request, 'hero.html', {'job_types': job_types,'job_type': job_type, 'job_descriptions': job_descriptions,'other_context':other_context})
     
 class JobDescriptionDetailView(DetailView):
     model = JobDescription

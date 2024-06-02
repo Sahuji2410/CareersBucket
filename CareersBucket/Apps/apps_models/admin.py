@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(CareersBucketBaseUser)
 admin.site.register(JobDescription)
 admin.site.register(JobType)
+admin.site.register(jobAnnouncments)
