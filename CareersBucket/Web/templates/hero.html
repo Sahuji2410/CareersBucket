@@ -2,14 +2,24 @@
 {% load static %}
 {% block title %}{% endblock %}
 {% block JobTypes %}
-  <p>Job Types</p>
+ 
+  <div class="logo_sidebar">
+    <img src="{% static '' %}" alt="Job" />
+    <p>Job Types</p>
+  </div>
   {% for job_type in job_types %}
-    <button class="jobs-button"><a style="text-decoration: none;" href="{% url 'jobtype_detail' job_type.pk %}">{{ job_type.name }}</a></button>
+    <a class="Job_type" href="{% url 'jobtype_detail' job_type.pk %}" style="text-decoration: none;">
+     {{ job_type.name }}
+    </a>
   {% endfor %}
+  
 {% endblock %}
 
 {% block content %}
 <style>
+    .logo_sidebar{
+        display:flex;
+    }
     .Cards_item {
         display: flex;
         justify-content: space-between;
@@ -157,7 +167,7 @@
         border: 1px solid #888;
         width: 80%;
         max-width: 600px;
-        border-radius: 10px;
+        border-radius: 10px;a
         position: relative;
     }
     .modal-header {
@@ -175,10 +185,15 @@
         font-size: 28px;
         font-weight: bold;
         cursor: pointer;
+        border: none;
+    border-radius: 12px;
+    background: #007bff;
+    }  .close a{
+       color:white;
     }
     .close:hover,
     .close:focus {
-        color: black;
+        color: white;
         text-decoration: none;
         cursor: pointer;
     }
@@ -194,6 +209,8 @@
     .modal-footer button {
         margin-left: 10px;
     }
+    
+    
 </style>
 
 <div class="container">
@@ -358,5 +375,7 @@
             }
         });
     });
+
 </script>
+
 {% endblock %}

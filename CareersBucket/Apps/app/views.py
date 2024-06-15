@@ -5,6 +5,7 @@ from Apps.apps_models.models import JobType, JobDescription
 from .serializers import JobTypeSerializer, JobDescriptionSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
+from .serializers import *
 
 from rest_framework.response import Response
 
@@ -411,3 +412,206 @@ class JobDescriptionDetailView(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )   
+
+class jobAnnouncmentsView(APIView):
+    @swagger_auto_schema(
+        responses={
+            200: jobAnnouncmentsSerializer(many=True),
+            500: "Internal Server Error"
+        }
+    )
+    def get(self, request):
+        try:
+            job_type = jobAnnouncments.objects.all()
+            serializer = jobAnnouncmentsSerializer(job_type, many=True)
+            print(f"serializer data ------->{serializer.data}")
+            return Response(
+                {
+                    "status": "success",
+                    'responseMessage': 'Job Announcements retrieved successfully',
+                    "responseData": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            print(f"JobTypeView get error ----{e}")
+            return Response(
+                {
+                    'responseCode': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'responseMessage': "Something went wrong",
+                    'responseData': None,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @swagger_auto_schema(
+        request_body=jobAnnouncmentsSerializer,
+        responses={
+            201: jobAnnouncmentsSerializer,
+            400: "Bad Request",
+            500: "Internal Server Error"
+        }
+    )
+    def post(self, request):
+        try:
+            serializer = jobAnnouncmentsSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {
+                        "status": "success",
+                        'responseMessage': 'Job Announcements created successfully',
+                        "responseData": serializer.data
+                    },
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(
+                {
+                    'responseCode': status.HTTP_400_BAD_REQUEST,
+                    'responseMessage': "Bad Request",
+                    'responseData': serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            print(f"JobTypeView post error ----{e}")
+            return Response(
+                {
+                    'responseCode': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'responseMessage': "Something went wrong",
+                    'responseData': None,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+
+class jobAnnouncementsDetailView(APIView):
+    @swagger_auto_schema(
+        responses={
+            200: jobAnnouncmentsSerializer,
+            404: "Not Found",
+            500: "Internal Server Error"
+        }
+    )
+    def get(self, request, pk):
+        try:
+            job_type = jobAnnouncments.objects.get(pk=pk)
+            serializer = jobAnnouncmentsSerializer(job_type)
+            return Response(
+                {
+                    "status": "success",
+                    'responseMessage': 'jobAnnouncments retrieved successfully',
+                    "responseData": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        except jobAnnouncments.DoesNotExist:
+            return Response(
+                {
+                    'responseCode': status.HTTP_404_NOT_FOUND,
+                    'responseMessage': "jobAnnouncments not found",
+                    'responseData': None,
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            print(f"JobTypeDetailView get error ----{e}")
+            return Response(
+                {
+                    'responseCode': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'responseMessage': "Something went wrong",
+                    'responseData': None,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @swagger_auto_schema(
+        request_body=jobAnnouncmentsSerializer,
+        responses={
+            200: jobAnnouncmentsSerializer,
+            400: "Bad Request",
+            404: "Not Found",
+            500: "Internal Server Error"
+        }
+    )
+    def put(self, request, pk):
+        try:
+            job_type = jobAnnouncments.objects.get(pk=pk)
+            serializer = jobAnnouncmentsSerializer(job_type, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {
+                        "status": "success",
+                        'responseMessage': 'jobAnnouncments updated successfully',
+                        "responseData": serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            return Response(
+                {
+                    'responseCode': status.HTTP_400_BAD_REQUEST,
+                    'responseMessage': "Bad Request",
+                    'responseData': serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except jobAnnouncments.DoesNotExist:
+            return Response(
+                {
+                    'responseCode': status.HTTP_404_NOT_FOUND,
+                    'responseMessage': "jobAnnouncments not found",
+                    'responseData': None,
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            print(f"jobAnnouncmentsDetailView put error ----{e}")
+            return Response(
+                {
+                    'responseCode': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'responseMessage': "Something went wrong",
+                    'responseData': None,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @swagger_auto_schema(
+        responses={
+            204: "No Content",
+            404: "Not Found",
+            500: "Internal Server Error"
+        }
+    )
+    def delete(self, request, pk):
+        try:
+            job_type = jobAnnouncments.objects.get(pk=pk)
+            job_type.delete()
+            return Response(
+                {
+                    "status": "success",
+                    'responseMessage': 'jobAnnouncments deleted successfully',
+                    "responseData": None
+                },
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except jobAnnouncments.DoesNotExist:
+            return Response(
+                {
+                    'responseCode': status.HTTP_404_NOT_FOUND,
+                    'responseMessage': "jobAnnouncments not found",
+                    'responseData': None,
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            print(f"jobAnnouncmentsDetailView delete error ----{e}")
+            return Response(
+                {
+                    'responseCode': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    'responseMessage': "Something went wrong",
+                    'responseData': None,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
